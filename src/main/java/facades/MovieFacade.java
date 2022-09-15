@@ -55,10 +55,27 @@ public class MovieFacade {
     }
     public MovieDTO getById(long id) { //throws RenameMeNotFoundException {
         EntityManager em = emf.createEntityManager();
-        Movie movie = em.find(Movie.class, id);
+
+        try {
+            Movie movie = em.find(Movie.class, id);
 //        if (rm == null)
 //            throw new RenameMeNotFoundException("The RenameMe entity with ID: "+id+" Was not found");
-        return new MovieDTO(movie);
+            return new MovieDTO(movie);
+        } finally {
+            em.close();
+        }
+    }
+
+    public MovieDTO getMovieByName(String movieTitle) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Movie> query = em.createQuery("SELECT m FROM Movie m WHERE m.title = :mtitle", Movie.class);
+            query.setParameter("mtitle", movieTitle);
+            Movie movie = query.getSingleResult();
+            return new MovieDTO(movie);
+        } finally {
+            em.close();
+        }
     }
     
     //TODO Remove/Change this before use

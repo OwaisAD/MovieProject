@@ -1,10 +1,13 @@
 package rest;
 
 import entities.Movie;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.*;
 import utils.EMF_Creator;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.*;
+
 import io.restassured.parsing.Parser;
 import java.net.URI;
 import javax.persistence.EntityManager;
@@ -14,15 +17,15 @@ import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http.util.HttpStatus;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
-import static org.hamcrest.Matchers.equalTo;
 
 //Uncomment the line below, to temporarily disable this test
+//@Disable
 
 public class MovieResourceTest {
 
     private static final int SERVER_PORT = 7777;
     private static final String SERVER_URL = "http://localhost/api";
-    private static Movie r1, r2;
+    private static Movie m1, m2;
 
     static final URI BASE_URI = UriBuilder.fromUri(SERVER_URL).port(SERVER_PORT).build();
     private static HttpServer httpServer;
@@ -60,13 +63,13 @@ public class MovieResourceTest {
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
-        r1 = new Movie(2014, "Interstellar", new String[]{"Matthew McConaughey","Anne Hathaway"});
-        r2 = new Movie(2008, "The Dark Knight", new String[]{"Christian Bale","Heath Ledger"});
+        m1 = new Movie(2014, "Interstellar", new String[]{"Matthew McConaughey","Anne Hathaway"});
+        m2 = new Movie(2008, "The Dark Knight", new String[]{"Christian Bale","Heath Ledger"});
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Movie.deleteAllRows").executeUpdate();
-            em.persist(r1);
-            em.persist(r2);
+            em.persist(m1);
+            em.persist(m2);
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -76,7 +79,7 @@ public class MovieResourceTest {
     @Test
     public void testServerIsUp() {
         System.out.println("Testing is server UP");
-        given().when().get("/movies").then().statusCode(200);
+        given().when().get("/movie").then().statusCode(200);
     }
 
     //This test assumes the database contains two rows
@@ -84,7 +87,7 @@ public class MovieResourceTest {
     public void testDummyMsg() throws Exception {
         given()
                 .contentType("application/json")
-                .get("/movies/").then()
+                .get("/movie/").then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
                 .body("msg", equalTo("Hello World"));
@@ -94,17 +97,46 @@ public class MovieResourceTest {
     public void testCount() throws Exception {
         given()
                 .contentType("application/json")
-                .get("/movies/count").then()
+                .get("/movie/count").then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
                 .body("count", equalTo(2));
     }
 
-    // TEST FOR api/movie/all
+    // TEST FOR api/movie/all -- hvordan får jeg første ud element ud af json
+    /*@Test
+    public void testGettingFirstMovie() {
+        given()
+                .contentType(ContentType.JSON)
+                .get("/movie/").then()
+                .assertThat()
+                .statusCode(HttpStatus.OK_200.getStatusCode())
+                .body("")
+    }*/
 
 
-    // TEST FOR api/movie/title/{title}
+    // TEST FOR api/movie/title/{title} - TESTEN VIRKER IKKE HELT - ligner at json bugger
+    /*@Test
+    public void testGetMovieByName() {
+        given()
+                .contentType(ContentType.JSON)
+                .get("/title/{title}", m1.getTitle())
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK_200.getStatusCode())
+                .body("title", equalTo(m1.getTitle()));
+    }*/
 
-
-    // TEST FOR api/movie/{id}
+    // TEST FOR api/movie/{id} - get by id
+    @Test
+    public void testGetMovieById() {
+        given()
+                .contentType(ContentType.JSON)
+                .get("/movie/{id}", m1.getId())
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK_200.getStatusCode())
+                .body("title", equalTo(m1.getTitle()))
+                .body("actors", equalTo(m1.getActors()));
+    }
 }

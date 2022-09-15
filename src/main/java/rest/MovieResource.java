@@ -21,6 +21,12 @@ public class MovieResource {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
 
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getMovies() {
+        return Response.ok().entity(GSON.toJson(FACADE.getAll())).build();
+    }
+
     //get all movies
     @GET
     @Path("/all")
@@ -37,8 +43,15 @@ public class MovieResource {
         return Response.ok().entity(GSON.toJson(FACADE.getById(id))).build();
     }
 
+    // get movie by title
+    @GET
+    @Path("/title/{title}")
+    public Response getMovieByTitle(@PathParam("title") String title) {
+        return Response.ok().entity(GSON.toJson(FACADE.getMovieByName(title))).build();
+    }
+
     //get movie count
-    @Path("count")
+    @Path("/count")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getRenameMeCount() {
