@@ -72,12 +72,12 @@ public class MovieFacade {
         }
     }
     
-    /*public List<MovieDTO> getAll(){
+    public List<MovieDTO> getAll(){
         EntityManager em = emf.createEntityManager();
         TypedQuery<Movie> query = em.createQuery("SELECT m FROM Movie m", Movie.class);
         List<Movie> movies = query.getResultList();
-        return MovieDTO.getDtos(movies);
-    }*/
+        return MovieDTO.getDtos(movies); //instead of returning af list of movies we want to return a list of moviedtos since it adds a layer of security
+    }
     
     public static void main(String[] args) {
         emf = EMF_Creator.createEntityManagerFactory();

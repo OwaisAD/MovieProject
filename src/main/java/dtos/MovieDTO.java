@@ -3,6 +3,8 @@ package dtos;
 import entities.Movie;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -19,6 +21,13 @@ public class MovieDTO implements Serializable {
         this.title = movie.getTitle();
         this.actors = movie.getActors();
         this.id = movie.getId();
+    }
+
+
+    public static List<MovieDTO> getDtos(List<Movie> movies) {
+        List<MovieDTO> moviesdtos = new ArrayList<>();
+        movies.forEach(movie -> moviesdtos.add(new MovieDTO(movie)));
+        return moviesdtos;
     }
 
     public Long getId() {
