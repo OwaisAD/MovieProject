@@ -12,7 +12,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 //Todo Remove or change relevant parts before ACTUAL use
-@Path("movies")
+@Path("movie")
 public class MovieResource {
 
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
@@ -23,6 +23,7 @@ public class MovieResource {
 
     //get all movies
     @GET
+    @Path("/all")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getAllMovies() {
         return Response.ok().entity(GSON.toJson(FACADE.getAll())).build();

@@ -99,4 +99,12 @@ public class MovieResourceTest {
                 .statusCode(HttpStatus.OK_200.getStatusCode())
                 .body("count", equalTo(2));
     }
+
+    // TEST FOR api/movie/all
+
+
+    // TEST FOR api/movie/title/{title}
+
+
+    // TEST FOR api/movie/{id}
 }
