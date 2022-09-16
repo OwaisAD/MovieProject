@@ -46,6 +46,7 @@ public class MovieResource {
     // get movie by title
     @GET
     @Path("/title/{title}")
+    @Produces({MediaType.APPLICATION_JSON})
     public Response getMovieByTitle(@PathParam("title") String title) {
         return Response.ok().entity(GSON.toJson(FACADE.getMovieByName(title))).build();
     }
@@ -61,13 +62,13 @@ public class MovieResource {
     }
 
 
-    //create movie
-    @POST
+    //create movie - lav jsonstring parameter og brug fromJson
+    /*@POST
     @Path("/add")
-    public Response createMovie(@PathParam("year") int year, @PathParam("title") String title, @PathParam("actor1") String actor1, @PathParam("actor2") String actor2, @PathParam("actor3") String actor3){
-        String[] actors = {actor1, actor2, actor3}; // actors can defo be done in a smarter way
+    public Response createMovie(@PathParam("year") int year, @PathParam("title") String title){
+        //String[] actors = {actor1, actor2, actor3}; // actors can defo be done in a smarter way
         MovieDTO movieDTO = new MovieDTO(new Movie(year, title, actors));
         return Response.ok().entity(GSON.toJson(FACADE.create(movieDTO))).build();
-    }
+    }*/
 
 }

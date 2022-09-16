@@ -104,28 +104,28 @@ public class MovieResourceTest {
     }
 
     // TEST FOR api/movie/all -- hvordan får jeg første ud element ud af json
-    /*@Test
+    @Test
     public void testGettingFirstMovie() {
         given()
                 .contentType(ContentType.JSON)
                 .get("/movie/").then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("")
-    }*/
+                .body("", hasItem(hasEntry("title", "The Dark Knight")));
+    }
 
 
     // TEST FOR api/movie/title/{title} - TESTEN VIRKER IKKE HELT - ligner at json bugger
-    /*@Test
+    @Test
     public void testGetMovieByName() {
         given()
                 .contentType(ContentType.JSON)
-                .get("/title/{title}", m1.getTitle())
+                .get("/movie/title/{title}", m1.getTitle())
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
                 .body("title", equalTo(m1.getTitle()));
-    }*/
+    }
 
     // TEST FOR api/movie/{id} - get by id
     @Test

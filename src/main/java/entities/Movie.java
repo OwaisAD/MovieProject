@@ -21,12 +21,14 @@ public class Movie implements Serializable {
     private Long id;
     private int year;
     private String title;
-    private String[] actors;
+    @ElementCollection
+    @Column(name = "actor")
+    private List<String> actors = new ArrayList<>();
 
     public Movie() {
     }
 
-    public Movie(int year, String title, String[] actors) {
+    public Movie(int year, String title, List<String> actors) {
         this.year = year;
         this.title = title;
         this.actors = actors;
@@ -56,11 +58,11 @@ public class Movie implements Serializable {
         this.title = title;
     }
 
-    public String[] getActors() {
+    public List<String> getActors() {
         return actors;
     }
 
-    public void setActors(String[] actors) {
+    public void setActors(List<String> actors) {
         this.actors = actors;
     }
 }

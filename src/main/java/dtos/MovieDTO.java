@@ -2,6 +2,8 @@ package dtos;
 
 import entities.Movie;
 
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +16,9 @@ public class MovieDTO implements Serializable {
     private final Long id;
     private final int year;
     private final String title;
-    private final String[] actors;
+    @ElementCollection
+    @Column(name = "actor")
+    private final List<String> actors;
 
     public MovieDTO(Movie movie) {
         this.year = movie.getYear();
@@ -42,7 +46,7 @@ public class MovieDTO implements Serializable {
         return title;
     }
 
-    public String[] getActors() {
+    public List<String> getActors() {
         return actors;
     }
 
