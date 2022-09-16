@@ -7,6 +7,9 @@ import entities.Movie;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 //Uncomment the line below, to temporarily disable this test
@@ -38,9 +41,9 @@ public class MovieFacadeTest {
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Movie.deleteAllRows").executeUpdate();
-            em.persist(new Movie(2014, "Interstellar", new String[]{"Matthew McConaughey","Anne Hathaway"}));
-            em.persist(new Movie(2008, "The Dark Knight", new String[]{"Christian Bale","Heath Ledger"}));
-            em.persist(new Movie(2007, "No Country for Old Men", new String[]{"Javier Bardem","Tommy Lee Jones"}));
+            em.persist(new Movie(2014, "Interstellar", Arrays.stream(new String[]{"Matthew McConaughey","Anne Hathaway"}).collect(Collectors.toList())));
+            em.persist(new Movie(2008, "The Dark Knight", Arrays.stream(new String[]{"Christian Bale","Heath Ledger"}).collect(Collectors.toList())));
+            em.persist(new Movie(2007, "No Country for Old Men", Arrays.stream(new String[]{"Javier Bardem","Tommy Lee Jones"}).collect(Collectors.toList())));
 
             em.getTransaction().commit();
         } finally {
@@ -54,10 +57,10 @@ public class MovieFacadeTest {
     }
 
     // TODO: Delete or change this method 
-    @Test
-    public void testAFacadeMethod() throws Exception {
-        assertEquals(2, facade.getMovieCount(), "Expects two rows in the database");
-    }
+//    @Test
+//    public void testAFacadeMethod() throws Exception {
+//        assertEquals(2, facade.getMovieCount(), "Expects two rows in the database");
+//    }
     
 
 }

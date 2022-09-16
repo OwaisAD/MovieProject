@@ -10,6 +10,8 @@ import static org.hamcrest.Matchers.*;
 
 import io.restassured.parsing.Parser;
 import java.net.URI;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.UriBuilder;
@@ -63,8 +65,8 @@ public class MovieResourceTest {
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
-        m1 = new Movie(2014, "Interstellar", new String[]{"Matthew McConaughey","Anne Hathaway"});
-        m2 = new Movie(2008, "The Dark Knight", new String[]{"Christian Bale","Heath Ledger"});
+        m1 = new Movie(2014, "Interstellar", Arrays.stream(new String[]{"Matthew McConaughey","Anne Hathaway"}).collect(Collectors.toList()));
+        m2 = new Movie(2008, "The Dark Knight", Arrays.stream(new String[]{"Christian Bale","Heath Ledger"}).collect(Collectors.toList()));
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Movie.deleteAllRows").executeUpdate();
@@ -82,16 +84,6 @@ public class MovieResourceTest {
         given().when().get("/movie").then().statusCode(200);
     }
 
-    //This test assumes the database contains two rows
-    @Test
-    public void testDummyMsg() throws Exception {
-        given()
-                .contentType("application/json")
-                .get("/movie/").then()
-                .assertThat()
-                .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("msg", equalTo("Hello World"));
-    }
 
     @Test
     public void testCount() throws Exception {
